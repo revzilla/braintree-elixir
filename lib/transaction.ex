@@ -140,6 +140,8 @@ defmodule Braintree.Transaction do
         {:ok, construct(transaction)}
       {:error, %{"api_error_response" => error}} ->
         {:error, Error.construct(error)}
+      {:error, _any} ->
+        {:error, Error.construct(%{"message" => "An error occurred."})}
     end
   end
 
@@ -179,6 +181,8 @@ defmodule Braintree.Transaction do
         {:ok, construct(transaction)}
       {:error, %{"api_error_response" => error}} ->
         {:error, Error.construct(error)}
+      {:error, _any} ->
+        {:error, Error.construct(%{"message" => "An error occurred."})}
     end
   end
 
@@ -200,6 +204,8 @@ defmodule Braintree.Transaction do
         {:error, Error.construct(error)}
       {:error, :not_found} ->
         {:error, Error.construct(%{"message" => "Transaction ID is invalid."})}
+      {:error, _any} ->
+        {:error, Error.construct(%{"message" => "An error occurred."})}
     end
   end
 
@@ -219,6 +225,8 @@ defmodule Braintree.Transaction do
         {:error, Error.construct(error)}
       {:error, :not_found} ->
         {:error, Error.construct(%{"message" => "Transaction ID is invalid."})}
+      {:error, _any} ->
+        {:error, Error.construct(%{"message" => "An error occurred."})}
     end
   end
 end
