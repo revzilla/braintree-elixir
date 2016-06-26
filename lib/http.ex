@@ -90,11 +90,13 @@ defmodule Braintree.HTTP do
 
   @doc false
   def process_response_body(body) do
-    body
-    |> String.strip
-    |> XML.load
-  rescue
-    ErlangError -> Logger.error("unprocessable response: #{body}")
+    try do
+      body
+      |> String.strip
+      |> XML.load
+    catch
+      :exit, _ -> Logger.error("unprocessable response: #{body}")
+    end
   end
 
   @doc false

@@ -81,8 +81,13 @@ defmodule Braintree.XML do
     |> List.first
   end
 
-  defp transform(elements) when is_list(elements),
-    do: Enum.into(without_nil(elements), %{}, &transform/1)
+  defp transform(elements) when is_list(elements) do
+    if is_text_list?(elements) do
+      Enum.join(elements, "")
+    else
+      Enum.into(without_nil(elements), %{}, &transform/1)
+    end
+  end
 
   defp transform({name, [type: "integer"], [value]}),
     do: {name, String.to_integer(value)}
@@ -107,4 +112,8 @@ defmodule Braintree.XML do
 
   defp without_nil(list),
     do: Enum.reject(list, &Kernel.==(&1, nil))
+
+  defp is_text_list?([last]) when is_binary(last), do: true
+  defp is_text_list?([hd|rest]) when is_binary(hd), do: is_text_list?(rest)
+  defp is_text_list?(_), do: false
 end

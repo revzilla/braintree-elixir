@@ -18,6 +18,13 @@ defmodule Braintree.HTTPTest do
     end
   end
 
+  test "process_request_body/1 converts the request body to xml correctly" do
+    params = %{company: "Soren", first_name: "José"}
+
+    assert HTTP.process_request_body(params) ==
+      ~s|<?xml version="1.0" encoding="UTF-8" ?>\n<company>Soren</company>\n<first-name>José</first-name>|
+  end
+
   test "process_request_body/1 converts the request body to xml" do
     params = %{company: "Soren", first_name: "Parker"}
 
@@ -31,10 +38,10 @@ defmodule Braintree.HTTPTest do
   end
 
   test "process_response_body/1 converts the request back from xml" do
-    xml = compress(~s|<?xml version="1.0" encoding="UTF-8" ?>\n<company><name>Soren</name></company>|)
+    xml = compress(~s|<?xml version="1.0" encoding="UTF-8" ?>\n<company><name>Jos&#233;</name></company>|)
 
     assert HTTP.process_response_body(xml) ==
-      %{"company" => %{"name" => "Soren"}}
+      %{"company" => %{"name" => "José"}}
   end
 
   test "process_response_body/1 safely handles empty responses" do
@@ -64,7 +71,7 @@ defmodule Braintree.HTTPTest do
       "Basic NDMyYTA0YTU1MTQyNGMyYjQxNzdkNzZlMjUyZTk5MWVmZDEyY2U0ZTplMWQ3ZDliZTM4MTc1NjU0NDRjOGI5YjkwYWQzZWYyZjNlYjI4YzBj"
   end
 
-  defp compress(string), do: :zlib.gzip(string)
+  defp compress(string), do: String.strip(string) # :zlib.gzip(string)
 
   defp assert_config_error(key, fun) do
     value = Application.get_env(:braintree, key)
