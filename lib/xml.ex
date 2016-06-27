@@ -7,6 +7,14 @@ defmodule Braintree.XML do
 
   @type xml :: binary
 
+  @xml_escape_entities [
+    {~r/&/, "&amp;"},
+    {~r/"/, "&quot;"},
+    {~r/'/, "&apos;"},
+    {~r/</, "&lt;"},
+    {~r/>/, "&gt;"}
+  ]
+
   import Braintree.Util, only: [hyphenate: 1, underscorize: 1]
 
   @doc ~S"""
@@ -14,12 +22,12 @@ defmodule Braintree.XML do
 
   ## Examples
 
-      iex> Braintree.XML.dump(%{a: %{b: 1, c: 2}})
-      ~s|<?xml version="1.0" encoding="UTF-8" ?>\n<a>\n<b>1</b>\n<c>2</c>\n</a>|
+      iex> Braintree.XML.dump(%{a: %{b: 1, c: "Two & 3"}})
+      ~s|<?xml version="1.0" encoding="UTF-8" ?>\n<a>\n<b>1</b>\n<c>Two &amp; 3</c>\n</a>|
   """
   @spec dump(Map.t) :: xml
   def dump(map) do
-    generate([@doctype | Enum.into(map, [])])
+    generate([@doctype | Enum.into(escape_xml_entity(map), [])])
   end
 
   defp generate(term) when is_binary(term),
@@ -39,6 +47,23 @@ defmodule Braintree.XML do
 
   defp generate({name, value}),
     do: "<#{hyphenate(name)}>#{value}</#{hyphenate(name)}>"
+
+  defp escape_xml_entity(str) when is_binary(str) do
+    @xml_escape_entities
+    |> Enum.reduce(str, fn {regex, val}, str -> String.replace(str, regex, val) end)
+  end
+
+  defp escape_xml_entity(map) when is_map(map) do
+    map
+    |> Enum.reduce(%{}, fn {key, value}, m -> Map.put(m, key, escape_xml_entity(value)) end)
+  end
+
+  defp escape_xml_entity(list) when is_list(list) do
+    list
+    |> Enum.reduce([], fn value, l -> l ++ [escape_xml_entity(value)] end)
+  end
+
+  defp escape_xml_entity(other), do: other
 
   @doc ~S"""
   Converts an XML document, or fragment, into a map. Type annotation
