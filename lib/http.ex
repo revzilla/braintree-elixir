@@ -120,10 +120,14 @@ defmodule Braintree.HTTP do
   end
 
   defp base_options do
-    path = Path.join(:code.priv_dir(:braintree), @cacertfile)
-
-    [hackney: [ssl_options: [cacertfile: path]],
+    [hackney: hackney_options,
      timeout: Braintree.get_env(:timeout, @timeout),
      recv_timeout: Braintree.get_env(:recv_timeout, @recv_timeout)]
+  end
+
+  def hackney_options do
+    path = Path.join(:code.priv_dir(:braintree), @cacertfile)
+
+    [ssl_options: [cacertfile: path]] ++ Braintree.get_env(:hackney_options, [])
   end
 end
