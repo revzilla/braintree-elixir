@@ -91,10 +91,12 @@ defmodule Braintree.HTTP do
 
   @doc false
   def decode_body(body) do
-    body
-    |> :zlib.gunzip
-    |> String.strip
-    |> Decoder.load
+    xml_str =
+      body
+      |> :zlib.gunzip
+      |> String.strip
+    Logger.info("Braintree: #{xml_str}")
+    Decoder.load(xml_str)
   rescue
     ErlangError -> Logger.error("unprocessable response")
   end
