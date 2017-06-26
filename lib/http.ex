@@ -20,11 +20,6 @@ defmodule Braintree.HTTP do
 
   alias Braintree.XML.{Decoder, Encoder}
 
-  @endpoints [
-    production: "https://api.braintreegateway.com/merchants/",
-    sandbox: "https://api.sandbox.braintreegateway.com/merchants/"
-  ]
-
   @cacertfile "/certs/api_braintreegateway_com.ca.crt"
 
   @headers [
@@ -80,10 +75,10 @@ defmodule Braintree.HTTP do
   @doc false
   @spec build_url(binary) :: binary
   def build_url(path) do
-    environment = Braintree.get_env(:environment, :sandbox)
     merchant_id = Braintree.get_env(:merchant_id)
+    endpoint    = Braintree.get_env(:endpoint)
 
-    Keyword.fetch!(@endpoints, environment) <> merchant_id <> "/" <> path
+    URI.merge(endpoint, "#{merchant_id}/#{path}")
   end
 
   @doc false
