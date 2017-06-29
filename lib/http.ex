@@ -55,18 +55,28 @@ defmodule Braintree.HTTP do
   def request(method, path, body \\ "") do
     response = :hackney.request(method, build_url(path), build_headers(), encode_body(body), build_options())
 
-    case response do
-      {:ok, code, _headers, body} when code >= 200 and code <= 399 ->
-        {:ok, decode_body(body)}
-      {:ok, 401, _headers, _body} ->
-        {:error, :unauthorized}
-      {:ok, 404, _headers, _body} ->
-        {:error, :not_found}
-      {:ok, _code, _headers, body} ->
-        {:error, decode_body(body)}
-      {:error, reason} ->
-        {:error, reason}
-    end
+    IO.puts "============================================================================================== <BRAINTREE>"
+    IO.inspect(response, [pretty: true, limit: 999999, width: 0])
+    IO.puts "----------------------------------------------------------------------------------------------------------"
+
+    return_value =
+      case response do
+        {:ok, code, _headers, body} when code >= 200 and code <= 399 ->
+          IO.inspect(decode_body(body), [pretty: true, limit: 999999, width: 0])
+          {:ok, decode_body(body)}
+        {:ok, 401, _headers, _body} ->
+          {:error, :unauthorized}
+        {:ok, 404, _headers, _body} ->
+          {:error, :not_found}
+        {:ok, _code, _headers, body} ->
+          IO.inspect(decode_body(body), [pretty: true, limit: 999999, width: 0])
+          {:error, decode_body(body)}
+        {:error, reason} ->
+          IO.inspect(reason, [pretty: true, limit: 999999, width: 0])
+          {:error, reason}
+      end
+    IO.puts "============================================================================================= </BRAINTREE>"
+    return_value
   end
 
   for method <- ~w(get delete post put)a do
