@@ -41,7 +41,7 @@ defmodule Braintree.VenmoAccount do
 
   ## Example
 
-      {:ok, venmo_account} = Braintree.Venmo.find(token)
+      {:ok, venmo_account} = Braintree.VenmoAccount.find(token)
   """
   @spec find(String.t(), Keyword.t()) :: {:ok, t} | {:error, Error.t()}
   def find(token, opts \\ []) do
@@ -58,7 +58,7 @@ defmodule Braintree.VenmoAccount do
 
   ## Example
 
-      {:ok, venmo_account} = Braintree.Venmo.update(
+      {:ok, venmo_account} = Braintree.VenmoAccount.update(
         token,
         %{options: %{make_default: true}
       )
@@ -78,7 +78,7 @@ defmodule Braintree.VenmoAccount do
 
   ## Example
 
-      {:ok, venmo_account} = Braintree.Venmo.delete(token)
+      {:ok, venmo_account} = Braintree.VenmoAccount.delete(token)
   """
   @spec delete(String.t(), Keyword.t()) :: {:ok, t} | {:error, Error.t()}
   def delete(token, opts \\ []) do
