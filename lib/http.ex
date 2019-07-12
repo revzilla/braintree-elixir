@@ -30,8 +30,7 @@ defmodule Braintree.HTTP do
 
   @endpoints [
     production: "https://api.braintreegateway.com/merchants/",
-    sandbox: "https://api.sandbox.braintreegateway.com/merchants/",
-    test: "https://api.sandbox.braintreegateway.com/merchants/"
+    sandbox: "https://api.sandbox.braintreegateway.com/merchants/"
   ]
 
   @cacertfile "/certs/api_braintreegateway_com.ca.crt"
