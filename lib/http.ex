@@ -131,7 +131,7 @@ defmodule Braintree.HTTP do
     merchant_id = get_lazy_env(opts, :merchant_id)
     endpoint = get_lazy_env(opts, :endpoint, Keyword.fetch!(@endpoints, environment))
 
-    Keyword.fetch!(@endpoints, environment) <> merchant_id <> "/" <> path
+    endpoint <> merchant_id <> "/" <> path
   end
 
   defp maybe_to_atom(value) when is_binary(value), do: String.to_existing_atom(value)
