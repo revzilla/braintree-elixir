@@ -9,7 +9,7 @@ defmodule Braintree.Customer do
 
   use Braintree.Construction
 
-  alias Braintree.{CreditCard, HTTP, PaypalAccount, Search, VenmoAccount}
+  alias Braintree.{CreditCard, HTTP, PaypalAccount, Search, VenmoAccount, AndroidPayCard}
   alias Braintree.ErrorResponse, as: Error
 
   @type t :: %__MODULE__{
@@ -26,6 +26,7 @@ defmodule Braintree.Customer do
           custom_fields: map,
           addresses: [map],
           credit_cards: [CreditCard.t()],
+          android_pay_cards: [AndroidPayCard.t()],
           paypal_accounts: [PaypalAccount.t()],
           venmo_accounts: [VenmoAccount.t()],
           coinbase_accounts: [map]
@@ -44,6 +45,7 @@ defmodule Braintree.Customer do
             custom_fields: %{},
             addresses: [],
             credit_cards: [],
+            android_pay_cards: [],
             paypal_accounts: [],
             venmo_accounts: [],
             coinbase_accounts: []
@@ -155,6 +157,7 @@ defmodule Braintree.Customer do
     %{
       customer
       | credit_cards: CreditCard.new(customer.credit_cards),
+        android_pay_cards: AndroidPayCard.new(customer.android_pay_cards),
         paypal_accounts: PaypalAccount.new(customer.paypal_accounts),
         venmo_accounts: VenmoAccount.new(customer.venmo_accounts)
     }
