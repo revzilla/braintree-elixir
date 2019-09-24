@@ -4,7 +4,7 @@ defmodule Braintree.PaymentMethod do
   may be a `CreditCard` or a `PaypalAccount`.
   """
 
-  alias Braintree.{CreditCard, HTTP, PaypalAccount, VenmoAccount, AndroidPayCard}
+  alias Braintree.{CreditCard, HTTP, PaypalAccount, VenmoAccount, AndroidPayCard, ApplePayCard}
   alias Braintree.ErrorResponse, as: Error
 
   @doc """
@@ -30,6 +30,7 @@ defmodule Braintree.PaymentMethod do
           | {:ok, PaypalAccount.t()}
           | {:ok, VenmoAccount.t()}
           | {:ok, AndroidPayCard.t()}
+          | {:ok, ApplePayCard.t()}
           | {:error, Error.t()}
   def create(params \\ %{}, opts \\ []) do
     with {:ok, payload} <- HTTP.post("payment_methods", %{payment_method: params}, opts) do
@@ -66,6 +67,7 @@ defmodule Braintree.PaymentMethod do
           | {:ok, PaypalAccount.t()}
           | {:ok, VenmoAccount.t()}
           | {:ok, AndroidPayCard.t()}
+          | {:ok, ApplePayCard.t()}
           | {:error, Error.t()}
   def update(token, params \\ %{}, opts \\ []) do
     path = "payment_methods/any/" <> token
@@ -106,6 +108,7 @@ defmodule Braintree.PaymentMethod do
           | {:ok, PaypalAccount.t()}
           | {:ok, VenmoAccount.t()}
           | {:ok, AndroidPayCard.t()}
+          | {:ok, ApplePayCard.t()}
           | {:error, Error.t()}
   def find(token, opts \\ []) do
     path = "payment_methods/any/" <> token
@@ -115,7 +118,7 @@ defmodule Braintree.PaymentMethod do
     end
   end
 
-  @spec new(map) :: CreditCard.t() | PaypalAccount.t() | VenmoAccount.t() | AndroidPayCard.t()
+  @spec new(map) :: CreditCard.t() | PaypalAccount.t() | VenmoAccount.t() | AndroidPayCard.t() | ApplePayCard.t()
   defp new(%{"credit_card" => credit_card}) do
     CreditCard.new(credit_card)
   end
@@ -130,5 +133,9 @@ defmodule Braintree.PaymentMethod do
 
   defp new(%{"android_pay_card" => android_pay_card}) do
     AndroidPayCard.new(android_pay_card)
+  end
+
+  defp new(%{"apple_pay_card" => apple_pay_card}) do
+    ApplePayCard.new(apple_pay_card)
   end
 end
