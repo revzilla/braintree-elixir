@@ -1,7 +1,6 @@
 defmodule Braintree.PaymentMethod do
   @moduledoc """
-  Create, update, find and delete payment methods. Payment methods
-  may be a `CreditCard` or a `PaypalAccount`.
+  Create, update, find and delete payment methods.
   """
 
   alias Braintree.{CreditCard, HTTP, PaypalAccount, VenmoAccount, AndroidPayCard, ApplePayCard}
