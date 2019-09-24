@@ -4,7 +4,7 @@ defmodule Braintree.PaymentMethod do
   may be a `CreditCard` or a `PaypalAccount`.
   """
 
-  alias Braintree.{CreditCard, HTTP, PaypalAccount}
+  alias Braintree.{CreditCard, HTTP, PaypalAccount, VenmoAccount, AndroidPayCard}
   alias Braintree.ErrorResponse, as: Error
 
   @doc """
@@ -26,7 +26,11 @@ defmodule Braintree.PaymentMethod do
       credit_card.type # "Visa"
   """
   @spec create(map, Keyword.t()) ::
-          {:ok, CreditCard.t()} | {:ok, PaypalAccount.t()} | {:error, Error.t()}
+          {:ok, CreditCard.t()}
+          | {:ok, PaypalAccount.t()}
+          | {:ok, VenmoAccount.t()}
+          | {:ok, AndroidPayCard.t()}
+          | {:error, Error.t()}
   def create(params \\ %{}, opts \\ []) do
     with {:ok, payload} <- HTTP.post("payment_methods", %{payment_method: params}, opts) do
       {:ok, new(payload)}
@@ -58,7 +62,11 @@ defmodule Braintree.PaymentMethod do
       payment_method.cardholder_name # "NEW"
   """
   @spec update(String.t(), map, Keyword.t()) ::
-          {:ok, CreditCard.t()} | {:ok, PaypalAccount.t()} | {:error, Error.t()}
+          {:ok, CreditCard.t()}
+          | {:ok, PaypalAccount.t()}
+          | {:ok, VenmoAccount.t()}
+          | {:ok, AndroidPayCard.t()}
+          | {:error, Error.t()}
   def update(token, params \\ %{}, opts \\ []) do
     path = "payment_methods/any/" <> token
 
@@ -92,8 +100,13 @@ defmodule Braintree.PaymentMethod do
 
       payment_method.type # CreditCard
   """
+
   @spec find(String.t(), Keyword.t()) ::
-          {:ok, CreditCard.t()} | {:ok, PaypalAccount.t()} | {:error, Error.t()}
+          {:ok, CreditCard.t()}
+          | {:ok, PaypalAccount.t()}
+          | {:ok, VenmoAccount.t()}
+          | {:ok, AndroidPayCard.t()}
+          | {:error, Error.t()}
   def find(token, opts \\ []) do
     path = "payment_methods/any/" <> token
 
@@ -102,12 +115,20 @@ defmodule Braintree.PaymentMethod do
     end
   end
 
-  @spec new(map) :: CreditCard.t() | PaypalAccount.t()
+  @spec new(map) :: CreditCard.t() | PaypalAccount.t() | VenmoAccount.t() | AndroidPayCard.t()
   defp new(%{"credit_card" => credit_card}) do
     CreditCard.new(credit_card)
   end
 
   defp new(%{"paypal_account" => paypal_account}) do
     PaypalAccount.new(paypal_account)
+  end
+
+  defp new(%{"venmo_account" => venmo_account}) do
+    VenmoAccount.new(venmo_account)
+  end
+
+  defp new(%{"android_pay_card" => android_pay_card}) do
+    AndroidPayCard.new(android_pay_card)
   end
 end

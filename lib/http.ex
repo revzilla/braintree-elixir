@@ -125,13 +125,13 @@ defmodule Braintree.HTTP do
 
   ## Helper Functions
 
-  @doc false
   @spec build_url(binary, Keyword.t()) :: binary
   def build_url(path, opts) do
     environment = opts |> get_lazy_env(:environment) |> maybe_to_atom()
     merchant_id = get_lazy_env(opts, :merchant_id)
+    endpoint = get_lazy_env(opts, :endpoint, Keyword.fetch!(@endpoints, environment))
 
-    Keyword.fetch!(@endpoints, environment) <> merchant_id <> "/" <> path
+    endpoint <> merchant_id <> "/" <> path
   end
 
   defp maybe_to_atom(value) when is_binary(value), do: String.to_existing_atom(value)
