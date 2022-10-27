@@ -56,6 +56,17 @@ defmodule Braintree.Search do
     end
   end
 
+  # Credit card transaction is an odd case because path to endpoints is
+  # different from the object name in the XML.
+  defp fetch_records_chunk(ids, "transactions", initializer, opts) when is_list(ids) do
+    search_params = %{search: %{ids: ids}}
+
+    with {:ok, %{"credit_card_transactions" => data}} <-
+           HTTP.post("transactions/advanced_search", search_params, opts) do
+      initializer.(data)
+    end
+  end
+
   defp fetch_records_chunk(ids, resource, initializer, opts) when is_list(ids) do
     search_params = %{search: %{ids: ids}}
 

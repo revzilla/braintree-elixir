@@ -10,7 +10,7 @@ defmodule Braintree.Transaction do
 
   use Braintree.Construction
 
-  alias Braintree.{AddOn, HTTP}
+  alias Braintree.{AddOn, HTTP, Search}
   alias Braintree.ErrorResponse, as: Error
 
   @type t :: %__MODULE__{
@@ -211,6 +211,22 @@ defmodule Braintree.Transaction do
     with {:ok, payload} <- HTTP.get(path, opts) do
       {:ok, new(payload)}
     end
+  end
+
+  @doc """
+  To search for transactions, pass a map of search parameters.
+
+  Braintree documentation:
+  https://docs-prod-us-east-2.production.braintree-api.com/reference/request/transaction/search/
+
+  ## Examples:
+
+      {:ok, transactions} = Braintree.Transaction.search(%{customer_phone: %{is: "1234567890"}})
+      {:ok, transactions} = Braintree.Transaction.search(%{source: ["recurring"]})
+  """
+  @spec search(map, Keyword.t()) :: {:ok, t()} | {:error, Error.t()}
+  def search(params, opts \\ []) when is_map(params) do
+    Search.perform(params, "transactions", &new/1, opts)
   end
 
   @doc """
