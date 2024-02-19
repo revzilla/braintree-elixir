@@ -30,7 +30,8 @@ defmodule Braintree.Customer do
           apple_pay_cards: [ApplePayCard.t()],
           paypal_accounts: [PaypalAccount.t()],
           venmo_accounts: [VenmoAccount.t()],
-          coinbase_accounts: [map]
+          coinbase_accounts: [map],
+          graphql_id: String.t()
         }
 
   defstruct id: nil,
@@ -50,7 +51,8 @@ defmodule Braintree.Customer do
             apple_pay_cards: [],
             paypal_accounts: [],
             venmo_accounts: [],
-            coinbase_accounts: []
+            coinbase_accounts: [],
+            graphql_id: nil
 
   @doc """
   Create a customer record, or return an error response with after failed
