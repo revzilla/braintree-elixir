@@ -164,7 +164,8 @@ defmodule Braintree.Customer do
         android_pay_cards: AndroidPayCard.new(customer.android_pay_cards),
         apple_pay_cards: ApplePayCard.new(customer.apple_pay_cards),
         paypal_accounts: PaypalAccount.new(customer.paypal_accounts),
-        venmo_accounts: VenmoAccount.new(customer.venmo_accounts)
+        venmo_accounts: VenmoAccount.new(customer.venmo_accounts),
+        graphql_id: Map.get(map, "global_id")
     }
   end
 
