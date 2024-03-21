@@ -36,7 +36,7 @@ defmodule Braintree.Transaction do
           discounts: [any],
           disputes: [any],
           escrow_status: String.t(),
-          gateway_rejection_reason: String.t(),
+          gateway_rejection_reason: String.t() | nil,
           id: String.t(),
           merchant_account_id: String.t(),
           order_id: String.t(),
