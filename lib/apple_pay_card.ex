@@ -7,7 +7,7 @@ defmodule Braintree.ApplePayCard do
 
   @type t :: %__MODULE__{
         bin: String.t(),
-        card_type: String.t(),
+        card_type: String.t() | nil,
         cardholder_name: String.t(),
         created_at: String.t(),
         customer_id: String.t(),

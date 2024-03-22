@@ -21,7 +21,7 @@ defmodule Braintree.CreditCardVerification do
           credit_card: CreditCard.t(),
           currency_iso_code: String.t(),
           cvv_response_code: String.t(),
-          gateway_rejection_reason: String.t(),
+          gateway_rejection_reason: String.t() | nil,
           id: String.t(),
           merchant_account_id: String.t(),
           processor_response_code: String.t(),
