@@ -5,9 +5,6 @@ defmodule Braintree.AndroidPayCard do
 
   use Braintree.Construction
 
-  alias Braintree.ErrorResponse, as: Error
-  alias Braintree.HTTP
-
   @type t :: %__MODULE__{
           bin: String.t(),
           created_at: String.t(),
@@ -18,13 +15,13 @@ defmodule Braintree.AndroidPayCard do
           google_transaction_id: String.t(),
           image_url: String.t(),
           source_card_last_4: String.t(),
-          source_card_type: String.t(),
+          source_card_type: String.t() | nil,
           source_description: String.t(),
           subscriptions: [any],
           token: String.t(),
           updated_at: String.t(),
           virtual_card_last_4: String.t(),
-          virtual_card_type: String.t()
+          virtual_card_type: String.t() | nil
   }
 
   defstruct bin: nil,

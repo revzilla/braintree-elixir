@@ -8,7 +8,7 @@ defmodule Braintree.CreditCard do
 
   @type t :: %__MODULE__{
           bin: String.t(),
-          card_type: String.t(),
+          card_type: String.t() | nil,
           cardholder_name: String.t(),
           commercial: String.t(),
           country_of_issuance: String.t(),
